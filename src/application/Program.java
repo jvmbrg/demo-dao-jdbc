@@ -34,11 +34,20 @@ public class Program {
 		for(Seller seller : list) {
 			System.out.println(seller);
 		} 
+		System.out.println();
 		
-		System.out.println("=== TEST 4: seller insert ===");
+		/*System.out.println("=== TEST 4: seller insert ===");
 		Seller seller = new Seller(null, "João Vítor", "masterg4nk3r@gmail.com", sdf.parse("14/06/2000"), 2500.0, new Department(2, null));
 		sellerDao.insert(seller);
 		System.out.println("Inserted! New id: " + seller.getId());
+		System.out.println(); */
+		
+		System.out.println("=== TEST 5: seller insert ===");
+		Seller seller = new Seller();
+		seller = sellerDao.findById(8);
+		seller.setName("Marta Wayne");
+		sellerDao.update(seller);
+		System.out.println("Update complete");
 	}
 
 }
