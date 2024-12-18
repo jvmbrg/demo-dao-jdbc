@@ -59,6 +59,7 @@ public class SellerDaoJDBC implements SellerDao{
 			 * apos a consulta, o programa vai instanciar uma new Department e acessar as colunas dentro da tabela para setar os dados 
 			 * que estamos buscando, no caso, vamos setar o Id e o nome do departamento que foram setados durante a criação das entidades
 			 */
+			
 			if(rs.next()) {
 				/* Aqui, depois de feita a busca dos dados para o id escolhido, a tabela retornada já está armazenada na variavel rs.
 				 * Agora, vamos instanciar os objetos e associa-los. Primeiro, foi instanciado o departamento, onde seus atributos foram
@@ -66,17 +67,10 @@ public class SellerDaoJDBC implements SellerDao{
 				 * parametro dentro da requisição, aqui é importante passar o nome da coluna exatamente como foi definida no banco de dados.
 				 * Depois, instanciamos uma vendedor e fizemos a mesma associação, buscando os dados com o comando "rs.get()" e atribuindo 
 				 * os valores de seus atributos de acordo com o que foi obtido na consulta SQL.*/
-				Department dep = new Department();
-				dep.setId(rs.getInt("DepartmentId"));
-				dep.setName(rs.getString("DepName"));
 				
-				Seller obj = new Seller();
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setBirthDate(rs.getDate("BirthDate"));
-				obj.setDepartment(dep);
+				Department dep = instantiateDepartment(rs);
+				Seller obj = instantiateSeller(rs, dep);
+				
 				return obj;
 			}
 			return null;
@@ -89,6 +83,24 @@ public class SellerDaoJDBC implements SellerDao{
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
+	}
+
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		Seller obj = new Seller();
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBaseSalary(rs.getDouble("BaseSalary"));
+		obj.setBirthDate(rs.getDate("BirthDate"));
+		obj.setDepartment(dep);
+		return obj;
+	}
+
+	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+		Department dep = new Department();
+		dep.setId(rs.getInt("DepartmentId"));
+		dep.setName(rs.getString("DepName"));
+		return dep;
 	}
 
 	@Override
